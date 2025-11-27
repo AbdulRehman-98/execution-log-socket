@@ -71,12 +71,14 @@ function createIndependentParser(runInstance) {
             const text = m[5] || "";
             const status = statusRaw ? statusRaw.toLowerCase() : null;
 
+            // ---- Main step ----
             let mainStep = steps.get(main);
             if (!mainStep) {
                 mainStep = run.addStep(this.currentJob, main);
                 steps.set(main, mainStep);
             }
 
+            // ---- Sub step ----
             let step = mainStep;
             if (sub) {
                 const key = `${main}/${sub}`;
@@ -86,9 +88,11 @@ function createIndependentParser(runInstance) {
                     steps.set(key, step);
                 }
             }
-
+            
+            // ---- Log append ----
             step.appendLog(text || line);
 
+            // ---- Step status ----
             if (status && ["success", "failed", "skipped"].includes(status)) {
                 step.finish(status);
             }

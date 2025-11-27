@@ -40,7 +40,7 @@ Connects separate WebSocket per DIMR ID
 Ensures isolated runs for 15, 16, etc.
 Handles reconnect with no duplication
 
-frontend/js/log-parser.js
+Isolated LogParser instance createIndependentParser(runInstance)
 Parses messages in format:
 [Timestamp] [Main] [Sub?] <Status?> Message
 
@@ -112,7 +112,6 @@ Project Folder Structure:
 /frontend
 /css/actions.css
 /js/websocket-client.js
-/js/log-parser.js
 /js/actions-ui.js
 index.html
 
