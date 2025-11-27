@@ -1,0 +1,339 @@
+/* Light theme reset */
+body {
+    margin: 0;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: #ffffff;
+    color: #24292f;
+}
+
+#actions-root {
+    max-width: 1300px;
+    margin: 24px auto;
+    padding: 0 20px;
+}
+
+/* HEADER ===================================================== */
+
+.gh-run-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background: #f6f8fa;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    padding: 14px 18px;
+    margin-bottom: 16px;
+}
+
+.gh-run-header-title {
+    font-size: 20px;
+    font-weight: 600;
+    color: #1d2125;
+}
+
+.gh-run-meta {
+    font-size: 13px;
+    color: #57606a;
+}
+
+.gh-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    background: #0969da;
+    color: white;
+}
+
+/* LAYOUT ===================================================== */
+
+.gh-layout {
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 16px;
+}
+
+/* SIDEBAR ==================================================== */
+
+.gh-sidebar {
+    background: #f6f8fa;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    padding: 10px 0;
+}
+
+.gh-sidebar-section-title {
+    font-size: 13px;
+    font-weight: 600;
+    color: #57606a;
+    padding: 0 12px 8px;
+}
+
+.gh-job-item {
+    padding: 10px 14px;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    font-size: 15px;
+}
+
+.gh-job-item:hover {
+    background: #eaeef2;
+}
+
+.gh-job-item-active {
+    background: #dde7f1;
+    border-left: 3px solid #0969da;
+}
+
+.gh-job-status-text {
+    font-size: 13px;
+    color: #57606a;
+}
+
+/* MAIN PANEL ================================================= */
+
+.gh-main {
+    background: white;
+    border: 1px solid #d8dee4;
+    border-radius: 8px;
+    padding: 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.gh-job-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.gh-job-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: #1d2125;
+}
+
+.gh-job-duration {
+    font-size: 14px;
+    color: #57606a;
+}
+
+.gh-steps-card {
+    border-top: 1px solid #d8dee4;
+    padding-top: 12px;
+}
+
+/* STEPS ====================================================== */
+
+.gh-step-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 6px;
+    cursor: pointer;
+    font-size: 16px;
+    border-radius: 6px;
+}
+
+.gh-step-row:hover {
+    background: #f0f3f6;
+}
+
+.gh-step-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gh-caret {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    border-right: 2px solid #6c6c6c;
+    border-bottom: 2px solid #6c6c6c;
+    transform: rotate(-45deg);
+    transition: transform .15s;
+}
+
+.gh-caret-open {
+    transform: rotate(45deg);
+}
+
+.gh-step-status-text,
+.gh-step-time {
+    font-size: 14px;
+    color: #57606a;
+}
+
+/* LOG DETAILS (NEW LOOK) ===================================== */
+
+.gh-step-details {
+    display: none;
+    padding: 8px 0 8px 0;
+    background: #fafbfc;
+    border-left: 4px solid #d0d7de;
+    margin-left: 24px;
+}
+
+/* FIXED LINE NUMBER GUTTER LEFT */
+.gh-log-line {
+    display: grid;
+    grid-template-columns: 50px auto; /* GUTTER + TEXT */
+    padding: 4px 8px;
+    font-family: Consolas, monospace;
+    font-size: 14px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.gh-log-num {
+    text-align: left;
+    padding-right: 10px;
+    color: #8a8f99;
+    user-select: none;
+}
+
+.gh-log-text {
+    color: #1d2125;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* show details block on expand */
+.gh-step-row.open + .gh-step-details {
+    display: block !important;
+}
+
+
+/* =========================================
+   STATUS PILL COLORS + ICONS + LOADER
+========================================= */
+
+.gh-pill-running {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #f1a60b26; /* soft orange tint */
+    color: #b55a00;
+    font-weight: 600;
+    border: 1px solid #e0a100;
+}
+
+/* Text + animated dots */
+.gh-pill-text {
+    display: inline-flex;
+    align-items: center;
+}
+.gh-dots::after {
+    content: "";
+    animation: dots 1.4s steps(4, end) infinite;
+}
+@keyframes dots {
+    0% { content: ""; }
+    25% { content: "."; }
+    50% { content: ".."; }
+    75% { content: "..."; }
+    100% { content: "...."; }
+}
+
+/* LOADER (instead of blinking dot) */
+.gh-loader {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    border: 2px solid #e0a100;
+    border-top-color: transparent;
+    animation: spin 0.6s linear infinite;
+}
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* SUCCESS pill */
+.gh-pill-success {
+    background: #dafbe1;
+    color: #064d15;
+    border: 1px solid #28a745;
+}
+
+/* FAILED pill */
+.gh-pill-failed {
+    background: #ffebe9;
+    color: #a90b00;
+    border: 1px solid #d30000;
+}
+
+/* ROUND SUCCESS ICON */
+.gh-icon-check {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    background: #28a745;
+    border-radius: 50%;
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14"><path fill="white" d="M11.2 4.3L6 9.5 3.3 6.8 2 8.1l4 4 7-7z"/></svg>') no-repeat center / contain;
+}
+
+/* ROUND FAIL ICON */
+.gh-icon-cross {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    background: #d30000;
+    border-radius: 50%;
+    mask: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="14" height="14" version="1.1" id="Layer_1" viewBox="0 0 512 512" xml:space="preserve"><g> <g>  <polygon points="512,59.076 452.922,0 256,196.922 59.076,0 0,59.076 196.922,256 0,452.922 59.076,512 256,315.076 452.922,512     512,452.922 315.076,256   "/> </g></g></svg>') no-repeat center / contain;
+}
+
+
+/* LOADER */
+.gh-loader {
+    border: 2px solid #f3f3f3;
+    border-top: 2px solid #db8b00;
+    border-radius: 50%;
+    width: 10px;
+    height: 10px;
+    animation: spin 0.8s linear infinite;
+}
+@keyframes spin {
+    100% { transform: rotate(360deg); }
+}
+
+/* CHECK ICON */
+.gh-icon-check::before {
+    content: '✔';
+    color: #2da44e;
+    font-weight: bold;
+}
+
+/* CROSS ICON */
+.gh-icon-cross::before {
+    content: '✖';
+    color: #cf222e;
+    font-weight: bold;
+}
+
+/* Running highlight */
+.gh-step-running {
+    background: rgba(255, 197, 39, 0.15);
+}
+.gh-step-running:hover {
+    background: rgba(255, 197, 39, 0.25);
+}
+
+.gh-pill-queued {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: rgba(255, 159, 64, 0.2);
+    color: rgba(255, 159, 64, 1);
+    font-weight: 600;
+    border: rgba(255, 159, 64, 1);
+}
