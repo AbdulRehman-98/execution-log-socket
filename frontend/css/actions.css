@@ -243,19 +243,6 @@ body {
     100% { content: "...."; }
 }
 
-/* LOADER (instead of blinking dot) */
-.gh-loader {
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    border: 2px solid #e0a100;
-    border-top-color: transparent;
-    animation: spin 0.6s linear infinite;
-}
-@keyframes spin {
-    to { transform: rotate(360deg); }
-}
-
 /* SUCCESS pill */
 .gh-pill-success {
     background: #dafbe1;

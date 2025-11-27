@@ -1,5 +1,6 @@
 <?php
-require __DIR__ . '/vendor/autoload.php';
+
+require_once __DIR__ . '/vendor/autoload.php';
 
 use App\WebSocket\LogServer;
 use Ratchet\Http\HttpServer;
@@ -20,13 +21,13 @@ $loop = $io->loop;
 echo "WebSocket listening at ws://localhost:9090\n";
 
 /**
- * For now we hard-code a short sample log. You can replace this
- * with your full DIMR execution logs or wire to your actual code.
+ * Hard-code a short sample log. 
+ * Replace with your execution logs or wire to your actual code.
  */
 $lines = [
     "========================= Execution Start =========================",
     "[2025-11-26 11:43:21] [Validating] Validated Request Method",
-    "[2025-11-26 11:43:21] [Validating] Domain Ip Mapping Request Id: All Pending",
+    "[2025-11-26 11:43:21] [Validating] Request Id: All Pending",
     "[2025-11-26 11:43:21] [Validating] <Failed> jkl;jkl;ding",
     "[2025-11-26 11:41:53] [Infrastructure Provisioning] [DNS] DNS Provisioning started",
     "[2025-11-26 11:41:56] [Infrastructure Provisioning] [DNS] Output: 🔄 Starting sync for domain: mpbike.com via godaddy | ✅ Synced: mhwehgm (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: pebaod (TXT) | ✅ Synced: pebaod (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: tcswn (TXT) | ✅ Synced: tcswn (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: mhwehgm (TXT) | ✅ Synced: @ (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: wapkvqk (TXT) | ✅ Synced: wapkvqk (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: @ (TXT) | ✅ Synced: @ (MX) | ✅ Synced: * (CNAME) | DNS record published successfully. | ",

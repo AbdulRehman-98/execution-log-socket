@@ -19,7 +19,7 @@ const LogParser = (function () {
      */
     function processLine(raw, uiRun = null) {
         if (uiRun) {
-            run = uiRun; // SWITCH CONTEXT SAFELY
+            run = uiRun; // SWITCH CONTEXT
         }
 
         const line = (raw || "").trim();
@@ -39,7 +39,7 @@ const LogParser = (function () {
             console.log("[Parser] END detected");
 
             if (run && typeof run.finishRun === "function") {
-                run.finishRun(); // ONLY HERE finalize global status
+                run.finishRun(); // finalize global status
             }
 
             if (run && currentJob && typeof run.finishJob === "function") {

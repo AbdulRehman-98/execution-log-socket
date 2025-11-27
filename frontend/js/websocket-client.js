@@ -1,19 +1,16 @@
 /**
- * MULTI–DIMR WebSocket + UI + Parser Manager
- * Each dimrId gets its own:
+ * MULTI–Channel WebSocket + UI + Parser Manager
+ * Each Channel gets its own:
  *  - WebSocket
  *  - ActionsRunUI instance
- *  - LogParser instance (FULLY isolated — NOT shared)
+ *  - Isolated LogParser instance
  */
 
 const WS = {};
 const RUN = {};
 const PARSER = {};
 
-/**
- * Clone LogParser PROPERLY.
- * This is **NOT** Object.create(LogParser) because that SHARES state.
- */
+
 function createIndependentParser(runInstance) {
     return {
         run: runInstance,
@@ -30,11 +27,7 @@ function createIndependentParser(runInstance) {
             this.currentJob = null;
             this.steps = new Map();
         },
-
-        /**
-         * Fully copied version of LogParser.processLine,
-         * but using "this" (isolated parser).
-         */
+      
         processLine(raw) {
             const run = this.run;
             const steps = this.steps;
@@ -104,47 +97,47 @@ function createIndependentParser(runInstance) {
 }
 
 /**
- * Initialize UI + independent parser for dimrId
+ * Initialize UI + independent parser for channel
  */
-function initUI(dimrId) {
-    RUN[dimrId] = ActionsRunUI.createRun({
-        root: `#actions-root-${dimrId}`,
-        title: `Domain-IP Mapping Execution #${dimrId}`
+function initUI(channelId) {
+    RUN[channelId] = ActionsRunUI.createRun({
+        root: `#actions-root-${channelId}`,
+        title: `Domain-IP Mapping Execution #${channelId}`
     });
 
-    PARSER[dimrId] = createIndependentParser(RUN[dimrId]);
+    PARSER[channelId] = createIndependentParser(RUN[channelId]);
 }
 
 /**
- * Connect websocket for dimrId (with proper reconnect)
+ * Connect websocket for channel (with proper reconnect)
  */
-function connectWS(dimrId) {
-    initUI(dimrId);
+function connectWS(channelId) {
+    initUI(channelId);
 
-    const channel = `dimr_${dimrId}`;
+    const channel = `dimr_${channelId}`;
     const wsUrl = `ws://${location.hostname}:9090/?channel=${channel}`;
 
-    WS[dimrId] = new WebSocket(wsUrl);
+    WS[channelId] = new WebSocket(wsUrl);
 
-    WS[dimrId].onopen = () =>
-        console.log(`[WS ${dimrId}] Connected → ${channel}`);
+    WS[channelId].onopen = () =>
+        console.log(`[WS ${channelId}] Connected → ${channel}`);
 
-    WS[dimrId].onmessage = (event) =>
-        PARSER[dimrId].processLine(event.data);
+    WS[channelId].onmessage = (event) =>
+        PARSER[channelId].processLine(event.data);
 
-    WS[dimrId].onclose = () => {
-        console.warn(`[WS ${dimrId}] Closed — retrying in 2s`);
-        setTimeout(() => connectWS(dimrId), 2000);
+    WS[channelId].onclose = () => {
+        console.warn(`[WS ${channelId}] Closed — retrying in 2s`);
+        setTimeout(() => connectWS(channelId), 2000);
     };
 
-    WS[dimrId].onerror = (err) => {
-        console.error(`[WS ${dimrId}] Error`, err);
-        try { WS[dimrId].close(); } catch {}
+    WS[channelId].onerror = (err) => {
+        console.error(`[WS ${channelId}] Error`, err);
+        try { WS[channelId].close(); } catch {}
     };
 }
 
 /**
- * START MULTIPLE STREAMS
+ * TEST START MULTIPLE STREAMS
  */
 connectWS(15);
 connectWS(16);
