@@ -4,7 +4,7 @@ namespace App\WebSocket;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
-class LogServer implements MessageComponentInterface
+class ExecutionLogServer implements MessageComponentInterface
 {
     protected \SplObjectStorage $clients;
     protected array $channels = []; // channel => [connections]
@@ -22,7 +22,7 @@ class LogServer implements MessageComponentInterface
      */
     public static function push(string $channel, string $line): void
     {
-        if (!self::$instance) return;
+        if (!self::$instance){ return; }
 
         if (!isset(self::$instance->channels[$channel])) {
             // nobody subscribed to this channel yet
@@ -50,7 +50,7 @@ class LogServer implements MessageComponentInterface
         $this->channels[$channel][$conn->resourceId] = $conn;
         $conn->channel = $channel;
 
-        echo "[LogServer] Client {$conn->resourceId} joined {$channel}\n";
+        echo "[ExecutionLogServer] Client {$conn->resourceId} joined {$channel}\n";
     }
 
     public function onClose(ConnectionInterface $conn): void
@@ -60,18 +60,18 @@ class LogServer implements MessageComponentInterface
 
         unset($this->channels[$channel][$conn->resourceId]);
 
-        echo "[LogServer] Client {$conn->resourceId} left {$channel}\n";
+        echo "[ExecutionLogServer] Client {$conn->resourceId} left {$channel}\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e): void
     {
-        echo "[LogServer] Error: {$e->getMessage()}\n";
+        echo "[ExecutionLogServer] Error: {$e->getMessage()}\n";
         $conn->close();
     }
 
     public function onMessage(ConnectionInterface $from, $msg): void
     {
-        echo "[LogServer] Received inbound WS message: {$msg}\n";
+        echo "[ExecutionLogServer] Received inbound WS message: {$msg}\n";
         // ignore — UI doesn't send anything
     }
 }

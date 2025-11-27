@@ -12,7 +12,7 @@ Architecture:
 
 Backend (PHP CLI / API)
 Pushes log lines during DIMR execution using:
-LogServer::push("dimr_15", "message");
+ExecutionLogServer::push("dimr_15", "message");
 
 WebSocket Server:
 Runs on Ratchet (PHP WebSocket library)
@@ -31,7 +31,7 @@ websocket-server.php
 Starts WebSocket server on port 9090
 Supports channel-based isolation
 
-App/WebSocket/LogServer.php
+App/WebSocket/ExecutionLogServer.php
 Internal broadcaster used by backend execution
 push($channel, $message) sends updates to connected UI
 
@@ -82,7 +82,7 @@ It will display:
 WebSocket listening at ws://localhost:9090
 
 Backend push example:
-\App\WebSocket\LogServer::push("dimr_15", "[2025] [DNS] <Success> Synced domain");
+\App\WebSocket\ExecutionLogServer::push("dimr_15", "[2025] [DNS] <Success> Synced domain");
 
 Serve index.html and open in browser:
 Ensure layouts contain:
@@ -115,7 +115,7 @@ Project Folder Structure:
 /js/actions-ui.js
 index.html
 
-/src/App/WebSocket/LogServer.php
+/src/App/WebSocket/ExecutionLogServer.php
 /websocket-server.php
 composer.json
 

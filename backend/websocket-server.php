@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\WebSocket\LogServer;
+use App\WebSocket\ExecutionLogServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 use Ratchet\Server\IoServer;
@@ -10,7 +10,7 @@ use Ratchet\Server\IoServer;
 $io = IoServer::factory(
     new HttpServer(
         new WsServer(
-            new LogServer()
+            new ExecutionLogServer()
         )
     ),
     9090
@@ -21,7 +21,7 @@ $loop = $io->loop;
 echo "WebSocket listening at ws://localhost:9090\n";
 
 /**
- * Hard-code a short sample log. 
+ * Hard-code a short sample log.
  * Replace with your execution logs or wire to your actual code.
  */
 $lines = [
@@ -30,7 +30,7 @@ $lines = [
     "[2025-11-26 11:43:21] [Validating] Request Id: All Pending",
     "[2025-11-26 11:43:21] [Validating] <Failed> jkl;jkl;ding",
     "[2025-11-26 11:41:53] [Infrastructure Provisioning] [DNS] DNS Provisioning started",
-    "[2025-11-26 11:41:56] [Infrastructure Provisioning] [DNS] Output: 🔄 Starting sync for domain: mpbike.com via godaddy | ✅ Synced: mhwehgm (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: pebaod (TXT) | ✅ Synced: pebaod (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: tcswn (TXT) | ✅ Synced: tcswn (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: mhwehgm (TXT) | ✅ Synced: @ (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: wapkvqk (TXT) | ✅ Synced: wapkvqk (A) | ✅ Synced: _dmarc (TXT) | ✅ Synced: @ (TXT) | ✅ Synced: @ (MX) | ✅ Synced: * (CNAME) | DNS record published successfully. | ",
+    "[2025-11-26 11:41:56] [Infrastructure Provisioning] [DNS] Output: Starting sync for domain: mpbike.com via godaddy | Synced: mhwehgm (A) | Synced: _dmarc (TXT) | Synced: pebaod (TXT) | Synced: pebaod (A) | Synced: _dmarc (TXT) | Synced: tcswn (TXT) | Synced: tcswn (A) | Synced: _dmarc (TXT) | Synced: mhwehgm (TXT) | Synced: @ (A) | Synced: _dmarc (TXT) | Synced: wapkvqk (TXT) | Synced: wapkvqk (A) | Synced: _dmarc (TXT) | Synced: @ (TXT) | Synced: @ (MX) | Synced: * (CNAME) | DNS record published successfully. | ",
     "[2025-11-26 11:41:56] [Infrastructure Provisioning] [DNS] <Success> DNS completed",
     "[2025-11-26 11:41:56] [Infrastructure Provisioning] [SSL] SSL Provisioning started",
     "[2025-11-26 11:42:56] [Infrastructure Provisioning] [SSL] <Failed> SSL failed: Invalid JSON response",
@@ -57,14 +57,19 @@ $idx = 0;
  */
 $timer = $loop->addPeriodicTimer(1, function () use (&$idx, $lines, &$timer, $loop) {
     if (!isset($lines[$idx])) {
-        \App\WebSocket\LogServer::push("dimr_15","[DONE]\n");
-        \App\WebSocket\LogServer::push("dimr_16","[DONE]\n");
-        $loop->cancelTimer($timer);
+        \App\WebSocket\ExecutionLogServer::push("dimr_15","[DONE]\n");
+        \App\WebSocket\ExecutionLogServer::push("dimr_16","[DONE]\n");
+        
+        if ($timer !== null) {
+            $loop->cancelTimer($timer);
+            $timer = null;
+        }
+
         return;
     }
 
-    \App\WebSocket\LogServer::push("dimr_15",$lines[$idx] . "\n");
-    \App\WebSocket\LogServer::push("dimr_16",$lines[$idx] . "\n");
+    \App\WebSocket\ExecutionLogServer::push("dimr_15",$lines[$idx] . "\n");
+    \App\WebSocket\ExecutionLogServer::push("dimr_16",$lines[$idx] . "\n");
     $idx++;
 });
 
