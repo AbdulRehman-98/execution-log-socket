@@ -4,7 +4,7 @@ namespace App\WebSocket;
 use Ratchet\MessageComponentInterface;
 use Ratchet\ConnectionInterface;
 
-class ExecutionLogServer implements MessageComponentInterface
+class AlphaWebSocketServer implements MessageComponentInterface
 {
     protected \SplObjectStorage $clients;
     protected array $channels = []; // channel => [connections]
@@ -18,7 +18,7 @@ class ExecutionLogServer implements MessageComponentInterface
     }
 
     /**
-     * Broadcast log line to a specific DIMR channel
+     * Broadcast log line to a specific channel
      */
     public static function push(string $channel, string $line): void
     {
@@ -36,7 +36,7 @@ class ExecutionLogServer implements MessageComponentInterface
 
     public function onOpen(ConnectionInterface $conn): void
     {
-        // GET ?channel=dimr_15
+        // GET ?channel=channel_xxx
         $query = $conn->httpRequest->getUri()->getQuery();
         parse_str($query, $params);
         $channel = $params['channel'] ?? 'default';
@@ -50,7 +50,7 @@ class ExecutionLogServer implements MessageComponentInterface
         $this->channels[$channel][$conn->resourceId] = $conn;
         $conn->channel = $channel;
 
-        echo "[ExecutionLogServer] Client {$conn->resourceId} joined {$channel}\n";
+        echo "[AlphaWebSocketServer] Client {$conn->resourceId} joined {$channel}\n";
     }
 
     public function onClose(ConnectionInterface $conn): void
@@ -60,18 +60,18 @@ class ExecutionLogServer implements MessageComponentInterface
 
         unset($this->channels[$channel][$conn->resourceId]);
 
-        echo "[ExecutionLogServer] Client {$conn->resourceId} left {$channel}\n";
+        echo "[AlphaWebSocketServer] Client {$conn->resourceId} left {$channel}\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e): void
     {
-        echo "[ExecutionLogServer] Error: {$e->getMessage()}\n";
+        echo "[AlphaWebSocketServer] Error: {$e->getMessage()}\n";
         $conn->close();
     }
 
     public function onMessage(ConnectionInterface $from, $msg): void
     {
-        echo "[ExecutionLogServer] Received inbound WS message: {$msg}\n";
+        echo "[AlphaWebSocketServer] Received inbound WS message: {$msg}\n";
         // ignore — UI doesn't send anything
     }
 }

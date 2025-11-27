@@ -2,7 +2,7 @@
 
 require_once __DIR__ . '/vendor/autoload.php';
 
-use App\WebSocket\ExecutionLogServer;
+use App\WebSocket\AlphaWebSocketServer;
 use Ratchet\Http\HttpServer;
 use Ratchet\WebSocket\WsServer;
 use Ratchet\Server\IoServer;
@@ -10,7 +10,7 @@ use Ratchet\Server\IoServer;
 $io = IoServer::factory(
     new HttpServer(
         new WsServer(
-            new ExecutionLogServer()
+            new AlphaWebSocketServer()
         )
     ),
     9090
@@ -57,8 +57,8 @@ $idx = 0;
  */
 $timer = $loop->addPeriodicTimer(1, function () use (&$idx, $lines, &$timer, $loop) {
     if (!isset($lines[$idx])) {
-        \App\WebSocket\ExecutionLogServer::push("dimr_15","[DONE]\n");
-        \App\WebSocket\ExecutionLogServer::push("dimr_16","[DONE]\n");
+        \App\WebSocket\AlphaWebSocketServer::push("dimr_15","[DONE]\n");
+        \App\WebSocket\AlphaWebSocketServer::push("dimr_16","[DONE]\n");
         
         if ($timer !== null) {
             $loop->cancelTimer($timer);
@@ -68,8 +68,8 @@ $timer = $loop->addPeriodicTimer(1, function () use (&$idx, $lines, &$timer, $lo
         return;
     }
 
-    \App\WebSocket\ExecutionLogServer::push("dimr_15",$lines[$idx] . "\n");
-    \App\WebSocket\ExecutionLogServer::push("dimr_16",$lines[$idx] . "\n");
+    \App\WebSocket\AlphaWebSocketServer::push("dimr_15",$lines[$idx] . "\n");
+    \App\WebSocket\AlphaWebSocketServer::push("dimr_16",$lines[$idx] . "\n");
     $idx++;
 });
 
