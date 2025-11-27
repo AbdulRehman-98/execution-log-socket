@@ -8,10 +8,10 @@
 
 const WS = {};
 const RUN = {};
-const PARSER = {};
+const EXECUTION_LOG_PARSER = {};
 
 
-function createIndependentParser(runInstance) {
+function executionLogParser(runInstance) {
     return {
         run: runInstance,
         currentJob: null,
@@ -103,23 +103,23 @@ function createIndependentParser(runInstance) {
 /**
  * Initialize UI + independent parser for channel
  */
-function initUI(channelId) {
+function initExecutionLogUI(channelId) {
     RUN[channelId] = ActionsRunUI.createRun({
         root: `#actions-root-${channelId}`,
         title: `Domain-IP Mapping Execution #${channelId}`
     });
 
-    PARSER[channelId] = createIndependentParser(RUN[channelId]);
+    EXECUTION_LOG_PARSER[channelId] = executionLogParser(RUN[channelId]);
 }
 
 /**
  * Connect websocket for channel (with proper reconnect)
  */
 function connectWS(channelId) {
-    initUI(channelId);
+    initExecutionLogUI(channelId);
 
     const channel = `dimr_${channelId}`;
-    const wsUrl = `ws://${location.hostname}:9090/?channel=${channel}`;
+    const wsUrl = `ws://localhost:9090/?channel=${channel}`;
 
     WS[channelId] = new WebSocket(wsUrl);
 
@@ -127,7 +127,7 @@ function connectWS(channelId) {
         console.log(`[WS ${channelId}] Connected → ${channel}`);
 
     WS[channelId].onmessage = (event) =>
-        PARSER[channelId].processLine(event.data);
+        EXECUTION_LOG_PARSER[channelId].processLine(event.data);
 
     WS[channelId].onclose = () => {
         console.warn(`[WS ${channelId}] Closed — retrying in 2s`);
